@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "860227612272",
+    "project_id": "startup-c1fbf",
+    "storage_bucket": "startup-c1fbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860227612272:android:613dc753e0333fe155ceb5",
+        "android_client_info": {
+          "package_name": "com.example.start_up"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1HI2catDDlfemaoWomHkuO4H8OcgopTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
