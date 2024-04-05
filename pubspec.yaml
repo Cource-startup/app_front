@@ -23,5 +23,18 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-assets:
-  - assets/images/
+  fonts:
+      - family: Baloo2
+        fonts:
+          - asset: assets/fonts/baloo2/Baloo2-Regular.ttf
+          - asset: assets/fonts/baloo2/Baloo2-Bold.ttf
+            weight: 600
+          - asset: assets/fonts/baloo2/Baloo2-Medium.ttf
+            weight: 700
+          - asset: assets/fonts/baloo2/Baloo2-SemiBold.ttf
+            weight: 800
+          - asset: assets/fonts/baloo2/Baloo2-ExtraBold.ttf
+            weight: 900
+
+  assets:
+    - assets/images/
