@@ -1,0 +1,40 @@
+name: app_front
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.4.10
+  cupertino_icons: ^1.0.2
+  http: ^1.1.0
+  flutter_svg: any
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+      - family: Baloo2
+        fonts:
+          - asset: assets/fonts/baloo2/Baloo2-Regular.ttf
+          - asset: assets/fonts/baloo2/Baloo2-Bold.ttf
+            weight: 600
+          - asset: assets/fonts/baloo2/Baloo2-Medium.ttf
+            weight: 700
+          - asset: assets/fonts/baloo2/Baloo2-SemiBold.ttf
+            weight: 800
+          - asset: assets/fonts/baloo2/Baloo2-ExtraBold.ttf
+            weight: 900
+
+  assets:
+    - assets/images/
