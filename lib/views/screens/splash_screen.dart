@@ -1,4 +1,3 @@
-import 'package:app_front/styles/app_fonts.dart';
 import 'package:app_front/styles/styles.dart';
 import 'package:app_front/views/screens/home_screen.dart';
 import 'package:flutter/material.dart';
