@@ -2,17 +2,22 @@ import 'package:app_front/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AuthButton extends StatelessWidget {
-  final String iconPath;
+class ScreenButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final String? iconPath;
+  final Color color;
+  final Color textColor;
+  final double? border;
 
-
-  const AuthButton({
+  const ScreenButton(
+    this.text,
+    this.onPressed, {
     super.key,
-    required this.iconPath,
-    required this.text,
-    required this.onPressed,
+    this.iconPath,
+    this.color = Colors.white,
+    this.textColor = Colors.black,
+    this.border,
   });
 
   @override
@@ -21,16 +26,16 @@ class AuthButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith(
-          (states) => AppColors.white,
+          (states) => color,
         ),
         shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
+          border != null ? RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(
+            side: BorderSide(
               color: Colors.black26,
-              width: 1,
+              width: border ?? 0.0,
             ),
-          ),
+          ) : null,
         ),
       ),
       child: Padding(
@@ -39,13 +44,13 @@ class AuthButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Padding(
+            iconPath != null ? Padding(
               padding: const EdgeInsets.only(right: 10, left: 12),
-              child: SvgPicture.asset(width: 40, height: 40, iconPath),
-            ),
+              child: SvgPicture.asset(width: 40, height: 40, iconPath ?? ''),
+            ) : Container(),
             Padding(
               padding: const EdgeInsets.only(right: 12),
-              child: Text(text, style: AppFonts.buttonLabel,),
+              child: Text(text, style: AppFonts.buttonLabel.copyWith(color: textColor)),
             ),
           ],
         ),

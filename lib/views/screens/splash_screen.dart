@@ -1,5 +1,4 @@
 import 'package:app_front/styles/styles.dart';
-import 'package:app_front/views/screens/home_screen.dart';
 import 'package:app_front/views/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -7,7 +6,7 @@ import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -17,11 +16,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 2),
+        const Duration(seconds: 2),
         () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            ));
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        ));
   }
 
   @override
@@ -34,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: SvgPicture.asset(
                     'assets/images/logo__full_color_white_eyes.svg'),
               ),
