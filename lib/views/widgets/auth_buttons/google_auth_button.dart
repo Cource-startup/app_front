@@ -1,3 +1,4 @@
+import 'package:app_front/views/screens/registration_screen.dart';
 import 'package:app_front/views/widgets/screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,11 +11,15 @@ class GoogleAuthButton extends StatelessWidget {
     super.key,
   });
 
-    Future<GoogleSignInAccount?> _handleSignIn() async {
+    Future<GoogleSignInAccount?> _handleSignIn(BuildContext context) async {
     try {
       // Google Sign In configuration object.
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       print(googleUser);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RegistrationScreen()),
+      );
       return googleUser;
     } catch (error) {
       print(error);
@@ -27,7 +32,7 @@ class GoogleAuthButton extends StatelessWidget {
     return ScreenButton(
       'Continue with Google',
       () {
-        _handleSignIn().then((GoogleSignInAccount? user) {
+        _handleSignIn(context).then((GoogleSignInAccount? user) {
           print(user!.displayName);
         }).catchError((e) => print(e));
       },

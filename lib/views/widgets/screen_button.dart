@@ -50,7 +50,7 @@ class ScreenButton extends StatelessWidget {
             ) : Container(),
             Padding(
               padding: const EdgeInsets.only(right: 12),
-              child: Text(text, style: AppFonts.buttonLabel,),
+              child: Text(text, style: AppFonts.buttonLabel.copyWith(color: textColor)),
             ),
           ],
         ),
