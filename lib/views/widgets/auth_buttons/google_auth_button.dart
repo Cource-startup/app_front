@@ -3,7 +3,6 @@ import 'package:app_front/views/widgets/screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
 class GoogleAuthButton extends StatelessWidget {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -11,7 +10,7 @@ class GoogleAuthButton extends StatelessWidget {
     super.key,
   });
 
-    Future<GoogleSignInAccount?> _handleSignIn(BuildContext context) async {
+  Future<GoogleSignInAccount?> _handleSignIn(BuildContext context) async {
     try {
       // Google Sign In configuration object.
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -22,8 +21,8 @@ class GoogleAuthButton extends StatelessWidget {
       );
       return googleUser;
     } catch (error) {
+      print("Error:  ");
       print(error);
-      return null;
     }
   }
 
