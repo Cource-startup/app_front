@@ -50,6 +50,15 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+     signingConfigs {
+        debug {
+            keyAlias 'AndroidDebugKey'           
+            keyPassword 'android'
+            storeFile file('C:/Users/VICTUS/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
+
 
     buildTypes {
         release {
@@ -65,3 +74,4 @@ flutter {
 }
 
 dependencies {}
+
