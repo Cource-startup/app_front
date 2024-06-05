@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:app_front/storage/auth_storage.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
 import 'package:app_front/views/widgets/screen_button.dart';
 import 'package:flutter/material.dart';
@@ -7,23 +7,30 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class GoogleAuthButton extends StatelessWidget {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
+final googleSignInProvider = Provider<GoogleSignIn>((ref) {
+  return GoogleSignIn(
     serverClientId:
         Platform.isAndroid ? dotenv.env['GOOGLE_AUTH_API_CLIENT_ID'] : null,
   );
+});
 
-  GoogleAuthButton({
-    super.key,
-  });
+final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>((ref) {
+  return AuthStateNotifier(ref);
+});
 
-  Future<GoogleSignInAccount?> _handleSignIn(BuildContext context) async {
+class AuthStateNotifier extends StateNotifier<bool> {
+  AuthStateNotifier(this.ref) : super(false);
+
+  final Ref ref;
+
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      String url = 'http://localhost:8888/checking';
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final googleSignIn = ref.read(googleSignInProvider);
+      final googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
-        Map<String, dynamic> userData = {
+        final userData = {
           'displayName': googleUser.displayName,
           'email': googleUser.email,
           'id': googleUser.id,
@@ -32,11 +39,20 @@ class GoogleAuthButton extends StatelessWidget {
         };
 
         final response = await http.post(
-          Uri.parse(url),
+          Uri.parse('http://10.0.2.2:8888/checking'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(userData),
         );
+
         if (response.statusCode == 200) {
+          // Save user data to SharedPreferences
+          final prefs = await ref.read(AuthStorage.sharedPrefProvider);
+          await prefs.setBool(AuthStorage.IS_AUTHENTICATED_KEY, true);
+          await prefs.setString(
+              AuthStorage.AUTHENTICATED_USER_EMAIL_KEY, googleUser.email);
+
+          state = true;
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => RegistrationScreen()),
@@ -44,21 +60,29 @@ class GoogleAuthButton extends StatelessWidget {
         } else {
           print('Failed to send user data: ${response.statusCode}');
         }
+      } else {
+        print('Google sign-in failed or was cancelled.');
       }
-      return googleUser;
     } catch (error) {
-      print("Error:  ");
-      print(error);
+      print("Error: $error");
     }
   }
+}
 
+class GoogleAuthButton extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authStateNotifier = ref.watch(authStateProvider.notifier);
+
     return ScreenButton(
       'Continue with Google',
       () {
-        _handleSignIn(context).then((GoogleSignInAccount? user) {
-          print(user!.displayName);
+        authStateNotifier.signInWithGoogle(context).then((_) {
+          if (ref.watch(authStateProvider)) {
+            print('Sign-in was successful.');
+          } else {
+            print('Sign-in was not successful.');
+          }
         }).catchError((e) => print(e));
       },
       iconPath: 'assets/images/auth/google.svg',
