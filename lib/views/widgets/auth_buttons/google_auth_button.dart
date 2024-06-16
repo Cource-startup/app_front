@@ -46,9 +46,11 @@ class AuthStateNotifier extends StateNotifier<bool> {
 
         if (response.statusCode == 200) {
           // Save user data to SharedPreferences
-          final prefs = await ref.read(AuthStorage.sharedPrefProvider);
-          await prefs.setBool(AuthStorage.IS_AUTHENTICATED_KEY, true);
-          await prefs.setString(
+          final SharedPreferences =
+              await ref.read(AuthStorage.sharedPrefProvider);
+          await SharedPreferences.setBool(
+              AuthStorage.IS_AUTHENTICATED_KEY, true);
+          await SharedPreferences.setString(
               AuthStorage.AUTHENTICATED_USER_EMAIL_KEY, googleUser.email);
 
           state = true;
