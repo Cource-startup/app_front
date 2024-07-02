@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../../service/hashing._service.dart';
 
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn(
@@ -30,6 +31,9 @@ class AuthStateNotifier extends StateNotifier<bool> {
       final googleSignIn = ref.read(googleSignInProvider);
       final googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
+        final hashedPassword = await PasswordHasher.hashPassword();
+        print("Hashed Password: $hashedPassword ");
+
         final userData = {
           'displayName': googleUser.displayName,
           'email': googleUser.email,
@@ -37,18 +41,25 @@ class AuthStateNotifier extends StateNotifier<bool> {
           'photoUrl': googleUser.photoUrl,
           'serverAuthCode': googleUser.serverAuthCode,
         };
+        Map<String, String> requestHeaders = {
+          'Content-type': 'application/json',
+          'X-Requested-With': hashedPassword,
+          'Authorization': 'test_connection' // only after authorization
+        };
 
         final response = await http.post(
-          Uri.parse('http://10.0.2.2:8888/checking'),
-          headers: {'Content-Type': 'application/json'},
+          Uri.parse("http://10.0.2.2:8888/checking"),
+          headers: requestHeaders,
           body: jsonEncode(userData),
         );
 
         if (response.statusCode == 200) {
           // Save user data to SharedPreferences
-          final prefs = await ref.read(AuthStorage.sharedPrefProvider);
-          await prefs.setBool(AuthStorage.IS_AUTHENTICATED_KEY, true);
-          await prefs.setString(
+          final SharedPreferences =
+              await ref.read(AuthStorage.sharedPrefProvider);
+          await SharedPreferences.setBool(
+              AuthStorage.IS_AUTHENTICATED_KEY, true);
+          await SharedPreferences.setString(
               AuthStorage.AUTHENTICATED_USER_EMAIL_KEY, googleUser.email);
 
           state = true;

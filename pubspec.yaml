@@ -17,6 +17,7 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.5.1
+  cryptography: ^2.7.0
   flutter_dotenv: ^5.1.0
 
 dev_dependencies:
