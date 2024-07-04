@@ -1,3 +1,4 @@
+// ваш основной файл, например, main.dart
 import 'dart:convert';
 import 'package:app_front/storage/auth_storage.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
@@ -8,18 +9,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../service/hashing._service.dart';
-
-final googleSignInProvider = Provider<GoogleSignIn>((ref) {
-  return GoogleSignIn(
-    serverClientId:
-        Platform.isAndroid ? dotenv.env['GOOGLE_AUTH_API_CLIENT_ID'] : null,
-  );
-});
-
-final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>((ref) {
-  return AuthStateNotifier(ref);
-});
+import 'package:app_front/service/hashing_service.dart';
+import 'package:app_front/providers/auth_providers.dart'; // добавьте этот импорт
 
 class AuthStateNotifier extends StateNotifier<bool> {
   AuthStateNotifier(this.ref) : super(false);
