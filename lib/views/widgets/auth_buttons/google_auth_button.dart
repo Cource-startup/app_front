@@ -1,4 +1,3 @@
-// ваш основной файл, например, main.dart
 import 'dart:convert';
 import 'package:app_front/storage/auth_storage.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
@@ -10,7 +9,7 @@ import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:app_front/service/hashing_service.dart';
-import 'package:app_front/providers/auth_providers.dart'; // добавьте этот импорт
+import 'package:app_front/providers/auth_providers.dart';
 
 class AuthStateNotifier extends StateNotifier<bool> {
   AuthStateNotifier(this.ref) : super(false);
