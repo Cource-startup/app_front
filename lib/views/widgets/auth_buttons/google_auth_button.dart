@@ -21,9 +21,6 @@ class AuthStateNotifier extends StateNotifier<bool> {
       final googleSignIn = ref.read(googleSignInProvider);
       final googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
-        final hashedPassword = await PasswordHasher.hashPassword();
-        print("Hashed Password: $hashedPassword ");
-
         final userData = {
           'displayName': googleUser.displayName,
           'email': googleUser.email,
@@ -33,7 +30,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
         };
         Map<String, String> requestHeaders = {
           'Content-type': 'application/json',
-          'X-Requested-With': hashedPassword,
+          'X-Requested-With': 'asd',
           'Authorization': 'test_connection' // only after authorization
         };
 
