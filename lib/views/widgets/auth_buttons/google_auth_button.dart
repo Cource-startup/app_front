@@ -8,7 +8,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../service/hashing._service.dart';
 
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn(
@@ -31,9 +30,6 @@ class AuthStateNotifier extends StateNotifier<bool> {
       final googleSignIn = ref.read(googleSignInProvider);
       final googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
-        final hashedPassword = await PasswordHasher.hashPassword();
-        print("Hashed Password: $hashedPassword ");
-
         final userData = {
           'displayName': googleUser.displayName,
           'email': googleUser.email,
@@ -43,7 +39,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
         };
         Map<String, String> requestHeaders = {
           'Content-type': 'application/json',
-          'X-Requested-With': hashedPassword,
+          'X-Requested-With': 'as',
           'Authorization': 'test_connection' // only after authorization
         };
 
