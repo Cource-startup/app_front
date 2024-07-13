@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:app_front/service/hashing_service.dart';
 import 'package:app_front/providers/auth_providers.dart';
+import 'package:app_front/service/hashing_service.dart';
 
 class AuthStateNotifier extends StateNotifier<bool> {
   AuthStateNotifier(this.ref) : super(false);
@@ -18,6 +19,8 @@ class AuthStateNotifier extends StateNotifier<bool> {
 
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
+      final hashedPassword = await PasswordHasher.hashPassword();
+      print("Hashed Password: $hashedPassword ");
       final googleSignIn = ref.read(googleSignInProvider);
       final googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
@@ -30,7 +33,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
         };
         Map<String, String> requestHeaders = {
           'Content-type': 'application/json',
-          'X-Requested-With': 'asd',
+          'X-Requested-With': hashedPassword,
           'Authorization': 'test_connection' // only after authorization
         };
 
