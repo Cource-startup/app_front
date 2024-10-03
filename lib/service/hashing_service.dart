@@ -1,20 +1,13 @@
 import 'dart:convert';
-import 'package:cryptography/cryptography.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:crypto/crypto.dart';
 
-class PasswordHasher {
-  static Future<String> hashPassword() async {
-    final password = utf8.encode(dotenv.env['PASSWORD_TO_HASH'] ?? '');
-    final salt = utf8.encode(dotenv.env['SALT'] ?? '');
-    final algorithm = Pbkdf2(
-      macAlgorithm: Hmac.sha256(),
-      iterations: 100000,
-      bits: 256,
-    );
-    final newSecretKey = await algorithm.deriveKey(
-      secretKey: SecretKey(password),
-      nonce: salt,
-    );
-    return base64.encode(await newSecretKey.extractBytes());
+class TokenHasher {
+  static Future<String> getHash() async {
+    List<int> tokenBites =
+        utf8.encode(dotenv.env['X_REQUESTED_WITH_TOKEN'] ?? '');
+    String tokenHash = sha256.convert(tokenBites).toString();
+    print("token: $tokenHash");
+    return tokenHash;
   }
 }
