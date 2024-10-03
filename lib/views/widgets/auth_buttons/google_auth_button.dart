@@ -1,28 +1,29 @@
 import 'dart:convert';
 import 'package:app_front/storage/auth_storage.dart';
+import 'package:app_front/views/screens/home_screen.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
 import 'package:app_front/views/widgets/screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:app_front/service/hashing_service.dart';
 import 'package:app_front/providers/auth_providers.dart';
-import 'package:app_front/service/hashing_service.dart';
 
 class AuthStateNotifier extends StateNotifier<bool> {
   AuthStateNotifier(this.ref) : super(false);
 
   final Ref ref;
+  static const String authApiMethod = "/user_auth";
 
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      final hashedPassword = await PasswordHasher.hashPassword();
-      print("Hashed Password: $hashedPassword ");
+      final hashedToken = await TokenHasher.getHash();
       final googleSignIn = ref.read(googleSignInProvider);
       final googleUser = await googleSignIn.signIn();
+      final apiUrl = dotenv.env['API_URL'] ?? '';
+      final apiPort = dotenv.env['API_PORT'] ?? '';
+
       if (googleUser != null) {
         final userData = {
           'displayName': googleUser.displayName,
@@ -33,16 +34,19 @@ class AuthStateNotifier extends StateNotifier<bool> {
         };
         Map<String, String> requestHeaders = {
           'Content-type': 'application/json',
-          'X-Requested-With': hashedPassword,
+          'X-Requested-With': hashedToken,
           'Authorization': 'test_connection' // only after authorization
         };
-
+        print("Request:/n");
+        print("$apiUrl:$apiPort$authApiMethod");
+        print(jsonEncode(userData));
         final response = await http.post(
-          Uri.parse("http://10.0.2.2:8888/checking"),
+          Uri.parse("$apiUrl:$apiPort$authApiMethod"),
           headers: requestHeaders,
           body: jsonEncode(userData),
         );
-
+        print("Response:/n");
+        print(response.body);
         if (response.statusCode == 200) {
           // Save user data to SharedPreferences
           final SharedPreferences =
@@ -80,8 +84,16 @@ class GoogleAuthButton extends ConsumerWidget {
       () {
         authStateNotifier.signInWithGoogle(context).then((_) {
           if (ref.watch(authStateProvider)) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
             print('Sign-in was successful.');
           } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
             print('Sign-in was not successful.');
           }
         }).catchError((e) => print(e));
