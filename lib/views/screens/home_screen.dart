@@ -9,9 +9,9 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            SvgPicture.asset(
-              'assets/images/icons/notifications.svg',
-              width: 44,
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: SvgPicture.asset('assets/images/icons/avatar.svg'),
             ),
             SizedBox(width: 8),
             Text(

@@ -15,7 +15,7 @@ class AppFonts {
       fontWeight: FontWeight.w800);
   static TextStyle h3 = TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 32,
+      fontSize: 20,
       color: AppColors.black,
       fontWeight: FontWeight.w800);
 
