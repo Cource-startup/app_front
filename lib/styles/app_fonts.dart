@@ -13,6 +13,16 @@ class AppFonts {
       fontSize: 24,
       color: AppColors.black,
       fontWeight: FontWeight.w800);
+  static TextStyle titleCourses = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 18,
+      color: AppColors.black,
+      fontWeight: FontWeight.w800);
+  static TextStyle courseh3 = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 14,
+      color: AppColors.black,
+      fontWeight: FontWeight.w400);
   static TextStyle h3 = TextStyle(
       fontFamily: 'Poppins',
       fontSize: 20,
