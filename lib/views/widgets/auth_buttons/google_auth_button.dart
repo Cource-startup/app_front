@@ -20,30 +20,28 @@ class AuthStateNotifier extends StateNotifier<bool> {
     try {
       final hashedToken = await TokenHasher.getHash();
       final googleSignIn = ref.read(googleSignInProvider);
-      final googleUser = await googleSignIn.signIn();
+      final googleSignInAccount = await googleSignIn.signIn();
       final apiUrl = dotenv.env['API_URL'] ?? '';
       final apiPort = dotenv.env['API_PORT'] ?? '';
 
-      if (googleUser != null) {
-        final userData = {
-          'displayName': googleUser.displayName,
-          'email': googleUser.email,
-          'id': googleUser.id,
-          'photoUrl': googleUser.photoUrl,
-          'serverAuthCode': googleUser.serverAuthCode,
-        };
+      if (googleSignInAccount != null) {
         Map<String, String> requestHeaders = {
           'Content-type': 'application/json',
           'X-Requested-With': hashedToken,
           'Authorization': 'test_connection' // only after authorization
         };
-        print("Request:/n");
-        print("$apiUrl:$apiPort$authApiMethod");
-        print(jsonEncode(userData));
         final response = await http.post(
           Uri.parse("$apiUrl:$apiPort$authApiMethod"),
           headers: requestHeaders,
-          body: jsonEncode(userData),
+          body: jsonEncode({
+            "google_sign_in_account": {
+              'display_name': googleSignInAccount.displayName,
+              'email': googleSignInAccount.email,
+              'id': googleSignInAccount.id,
+              'photo_url': googleSignInAccount.photoUrl,
+              'server_auth_code': googleSignInAccount.serverAuthCode,
+            },
+          }),
         );
         print("Response:/n");
         print(response.body);
@@ -54,7 +52,8 @@ class AuthStateNotifier extends StateNotifier<bool> {
           await SharedPreferences.setBool(
               AuthStorage.IS_AUTHENTICATED_KEY, true);
           await SharedPreferences.setString(
-              AuthStorage.AUTHENTICATED_USER_EMAIL_KEY, googleUser.email);
+              AuthStorage.AUTHENTICATED_USER_EMAIL_KEY,
+              googleSignInAccount.email);
 
           state = true;
 
