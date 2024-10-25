@@ -1,5 +1,5 @@
 import 'package:app_front/styles/styles.dart';
-import 'package:app_front/views/widgets/screen_button.dart';
+import 'package:app_front/views/widgets/auth_buttons/registration_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -56,32 +56,7 @@ class RegistrationScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 36, left: 16, right: 16),
-              child: ScreenButton(
-                "Create account",
-                () {
-                  print("Create account for ${_usernameController.text}");
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Alert"),
-                        content: Text(
-                            "Create account for ${_usernameController.text}"),
-                        actions: [
-                          TextButton(
-                            child: Text("ok"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                color: AppColors.firstBrand,
-                textColor: AppColors.white,
-              ),
+              child: RegistrationButton(login: _usernameController.text),
             ),
           ],
         ),

@@ -3,8 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthStorage {
-  static const IS_AUTHENTICATED_KEY = 'IS_AUTHENTICATED_KEY';
-  static const AUTHENTICATED_USER_EMAIL_KEY = 'AUTHENTICATED_USER_EMAIL_KEY';
+  static const AUTHENTICATED_USER_EMAIL_KEY = 'USER_EMAIL_KEY';
+  static const AUTH_STATUS_KEY = 'AUTH_KEY';
+  static const NOT_REGISTERED_STATUS = 'NOT_REGISTERED';
+  static const AUTHENTICATED_STATUS = 'AUTHENTICATED';
+  static const NOT_AUTHENTICATED_STATUS = 'NOT_AUTHENTICATED';
 
   static final sharedPrefProvider = Provider((_) async {
     return await SharedPreferences.getInstance();
@@ -14,18 +17,16 @@ class AuthStorage {
     (ref) => null,
   );
 
-  static final setIsAuthenticatedProvider = StateProvider.family<void, bool>(
-    (ref, isAuth) async {
+  static final setAuthStatusProvider = StateProvider.family<void, String>(
+    (ref, authStatus) async {
       final prefs = await ref.watch(sharedPrefProvider);
       ref.watch(setAuthStateProvider);
-      prefs.setBool(
-        IS_AUTHENTICATED_KEY,
-        isAuth,
-      );
+      prefs.setString(AUTH_STATUS_KEY, authStatus);
     },
   );
 
-  static final setAuthenticatedUserProvider = StateProvider.family<void, String>(
+  static final setAuthenticatedUserProvider =
+      StateProvider.family<void, String>(
     (ref, email) async {
       final prefs = await ref.watch(sharedPrefProvider);
       ref.watch(setAuthStateProvider);
@@ -36,11 +37,11 @@ class AuthStorage {
     },
   );
 
-  static final getIsAuthenticatedProvider = FutureProvider<bool>(
+  static final getAuthStatusProvider = FutureProvider<String>(
     (ref) async {
       final prefs = await ref.watch(sharedPrefProvider);
       ref.watch(setAuthStateProvider);
-      return prefs.getBool(IS_AUTHENTICATED_KEY) ?? false;
+      return prefs.getString(AUTH_STATUS_KEY) ?? '';
     },
   );
 
