@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:app_front/providers/auth_providers.dart';
 
 class GoogleAuthButton extends ConsumerWidget {
+  const GoogleAuthButton({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateNotifier = ref.watch(authStateProvider.notifier);
