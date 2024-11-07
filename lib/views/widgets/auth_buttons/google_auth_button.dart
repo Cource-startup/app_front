@@ -89,7 +89,8 @@ class GoogleAuthButton extends ConsumerWidget {
             );
             print('Sign-in was successful.');
           } else {
-            print('Sign-in was not successful.');
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
           }
         }).catchError((e) => print(e));
       },
