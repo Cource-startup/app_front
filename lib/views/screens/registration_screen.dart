@@ -56,7 +56,7 @@ class RegistrationScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 36, left: 16, right: 16),
-              child: RegistrationButton(login: _usernameController.text),
+              child: RegistrationButton(login: "test_user"),
             ),
           ],
         ),
