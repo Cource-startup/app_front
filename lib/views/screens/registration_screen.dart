@@ -1,12 +1,13 @@
 import 'package:app_front/styles/styles.dart';
-import 'package:app_front/views/widgets/auth_buttons/registration_button.dart';
+import 'package:app_front/views/widgets/google_auth_buttons/registration_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 class RegistrationScreen extends StatelessWidget {
   RegistrationScreen({super.key});
 
   final TextEditingController _usernameController = TextEditingController();
+  final container = ProviderContainer();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class RegistrationScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 36, left: 16, right: 16),
-              child: RegistrationButton(login: "test_user"),
+              child: RegistrationButton(loginTextfieldController: _usernameController),
             ),
           ],
         ),

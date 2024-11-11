@@ -1,3 +1,4 @@
+import 'package:app_front/views/widgets/test_login_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,7 +9,10 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home Page'),
       ),
       body: Center(
-        child: Text('Hello World!'),
+        child: Column(children: [
+          Text('Hello World!'),
+          TestLoginWidget(),
+        ]),
       ),
     );
   }
