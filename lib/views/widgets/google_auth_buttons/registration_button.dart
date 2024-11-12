@@ -37,7 +37,7 @@ class RegistrationButton extends GoogleBaseButton {
       if (response?.statusCode == 200) {
         final user = ref.read(userProvider.notifier);
         user.updateGoogleSignInAccount(googleSignInAccount);
-        user.updateLogin(json.decode(response!.body).user.login);
+        user.updateLogin(json.decode(response!.body)['user']['login']);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
