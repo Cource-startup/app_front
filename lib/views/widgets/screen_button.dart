@@ -25,10 +25,10 @@ class ScreenButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith(
+        backgroundColor: WidgetStateProperty.resolveWith(
           (states) => color,
         ),
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           border != null ? RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(

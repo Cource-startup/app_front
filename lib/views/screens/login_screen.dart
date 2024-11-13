@@ -1,5 +1,5 @@
 import 'package:app_front/styles/styles.dart';
-import 'package:app_front/views/widgets/auth_buttons/google_auth_button.dart';
+import 'package:app_front/views/widgets/google_auth_buttons/google_auth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
