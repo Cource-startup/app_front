@@ -25,11 +25,9 @@ class RegistrationButton extends GoogleBaseButton {
       var response = await apiRequestService.post(
         '/register_user',
         {
-          "google_sign_in_account": {
-            'id': googleSignInAccount.id,
-            'login': loginTextfieldController.text,
-            'server_auth_code': googleSignInAccount.serverAuthCode,
-          },
+          'service_auth_id': 'google_id',
+          'server_auth_code': googleSignInAccount.serverAuthCode,
+          'login': loginTextfieldController.text,
         },
         onError: (error) =>
             showErrorDialog(context, "Authentication request error!"),

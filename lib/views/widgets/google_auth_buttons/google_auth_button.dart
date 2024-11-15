@@ -19,10 +19,8 @@ class GoogleAuthButton extends GoogleBaseButton {
       var response = await apiRequestService.post(
         '/user_auth',
         {
-          "google_sign_in_account": {
-            'id': googleSignInAccount.id,
-            'server_auth_code': googleSignInAccount.serverAuthCode,
-          },
+          'service_auth_id': 'google_id',
+          'server_auth_code': googleSignInAccount.serverAuthCode,
         },
         onError: (error) =>
             showErrorDialog(context, "Authentication request error!"),
