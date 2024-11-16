@@ -7,31 +7,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Image.asset('assets/images/icons/avatar.jpg', width: 44),
-            ),
-            SizedBox(width: 8),
-            Text(
-              'Username',
-              style: AppFonts.h3,
-              textAlign: TextAlign.center,
-            )
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Image.asset('assets/images/icons/notifications_icon.jpg',
-                width: 44),
-          )
-        ],
-      ),
+      appBar: CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -40,7 +16,6 @@ class HomeScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Первый контейнер
                   Flexible(
                     flex: 1,
                     child: Container(
@@ -105,12 +80,9 @@ class HomeScreen extends StatelessWidget {
                                 SizedBox(height: 18),
                                 Row(
                                   children: [
-                                    Transform.translate(
-                                      offset: Offset(0, 0),
-                                      child: Image.asset(
-                                        'assets/images/icons/mentors_icon.png',
-                                        width: 42,
-                                      ),
+                                    Image.asset(
+                                      'assets/images/icons/mentors_icon.png',
+                                      width: 42,
                                     ),
                                     Transform.translate(
                                       offset: Offset(-16, 0),
@@ -135,11 +107,9 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 17,
-                        ),
+                        SizedBox(height: 17),
                         Container(
-                          width: double.maxFinite,
+                          width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.green[50],
                             borderRadius: BorderRadius.circular(16),
@@ -152,25 +122,27 @@ class HomeScreen extends StatelessWidget {
                                 Text('Active courses',
                                     style: AppFonts.courseh3),
                                 SizedBox(height: 24),
-                                Row(children: [
-                                  Text(
-                                    '12',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 16),
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: 24,
+                                Row(
+                                  children: [
+                                    Text(
+                                      '12',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                ])
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 16),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -190,7 +162,7 @@ class HomeScreen extends StatelessWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: 3, // замените на количество курсов
+                      itemCount: 3,
                       itemBuilder: (context, index) {
                         return CourseCard();
                       },
@@ -204,6 +176,40 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      title: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Image.asset('assets/images/icons/avatar.jpg', width: 44),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Username',
+            style: AppFonts.h3,
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+      actions: [
+        Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: Image.asset('assets/images/icons/notifications_icon.jpg',
+              width: 44),
+        )
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
 class CourseCard extends StatelessWidget {
@@ -301,21 +307,22 @@ class CourseInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-        width: 110,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Color(0xFFEBECF2),
-            width: 1.0,
-          ),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+      width: 110,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Color(0xFFEBECF2),
+          width: 1.0,
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 14),
-          ),
-        ));
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 14),
+        ),
+      ),
+    );
   }
 }
