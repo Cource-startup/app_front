@@ -7,11 +7,14 @@ class Config {
   // AUTH
   // Google
   static const bool forceCodeForRefreshTokenGoogle = false;
-  static String get googleServerClientId => dotenv.env['GOOGLE_SERVER_CLIENT_ID'] ?? "";
+  static String get googleServerClientId =>
+      dotenv.env['GOOGLE_SERVER_CLIENT_ID'] ?? "";
 
   // API
   static String get apiUrl => dotenv.env['API_URL'] ?? 'https://localhost';
   static String get apiPort => dotenv.env['API_PORT'] ?? '80';
-  static String get xRequestedWith => dotenv.env['X_REQUESTED_WITH_TOKEN'] ?? "X_REQUESTED";
-  static String get authorizationToken => dotenv.env['AUTHORIZATION_TOKEN'] ?? 'AUTHORIZATION';
+  static String get CSRFToken =>
+      dotenv.env['CSRF_BACKEND_TOKEN'] ?? "CSRF_TOKEN";
+  static String get authorizationToken =>
+      dotenv.env['AUTHORIZATION_TOKEN'] ?? 'AUTHORIZATION';
 }
