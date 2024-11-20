@@ -20,7 +20,7 @@ class GoogleAuthButton extends GoogleBaseButton {
         '/user_auth',
         {
           'service_auth_id_field_name': 'google_id',
-          'server_auth_code': googleSignInAccount.serverAuthCode,
+          'service_auth_code': googleSignInAccount.serverAuthCode,
         },
         onError: (error) =>
             showErrorDialog(context, "Authentication request error!"),

@@ -8,7 +8,7 @@ class ApiRequestHandler {
 
   Map<String, String> _buildHeaders({bool isJson = false}) {
     final headers = {
-      'X-CSRF-Token': HashHandler.hashToken(Config.CSRFToken),
+      'CSRF-Token': HashHandler.hashToken(Config.CSRFToken),
       'Authorization': Config.authorizationToken,
     };
 
