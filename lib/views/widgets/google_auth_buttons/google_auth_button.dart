@@ -19,10 +19,8 @@ class GoogleAuthButton extends GoogleBaseButton {
       var response = await apiRequestService.post(
         '/user_auth',
         {
-          "google_sign_in_account": {
-            'id': googleSignInAccount.id,
-            'server_auth_code': googleSignInAccount.serverAuthCode,
-          },
+          'service_auth_id_field_name': 'google_id',
+          'service_auth_code': googleSignInAccount.serverAuthCode,
         },
         onError: (error) =>
             showErrorDialog(context, "Authentication request error!"),
@@ -35,7 +33,8 @@ class GoogleAuthButton extends GoogleBaseButton {
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
-      } else if (response?.statusCode == 401) {
+      } else if (response?.statusCode == 401 &&
+          json.decode(response!.body)['status'] == 'not_registered') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => RegistrationScreen()),
