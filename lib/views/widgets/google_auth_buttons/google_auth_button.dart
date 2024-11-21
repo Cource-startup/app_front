@@ -41,11 +41,11 @@ class GoogleAuthButton extends GoogleBaseButton {
           MaterialPageRoute(builder: (context) => RegistrationScreen()),
         );
       } else {
-        showErrorDialog(context, "Authentication response error!");
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => HomeScreen()),
-        // );
+        // showErrorDialog(context, "Authentication response error!");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       }
     }
   }
