@@ -33,13 +33,18 @@ class GoogleAuthButton extends GoogleBaseButton {
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
-      } else if (response?.statusCode == 401 && json.decode(response!.body)['status'] == 'not_registered') {
+      } else if (response?.statusCode == 401 &&
+          json.decode(response!.body)['status'] == 'not_registered') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => RegistrationScreen()),
         );
       } else {
-        showErrorDialog(context, "Authentication response error!");
+        // showErrorDialog(context, "Authentication response error!");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       }
     }
   }
