@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:app_front/handler/api_request_handler.dart';
+import 'package:app_front/service/auth/auth_loading_provider.dart';
 import 'package:app_front/service/user/user_provider.dart';
 import 'package:app_front/views/screens/home_screen.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
@@ -13,42 +15,56 @@ class GoogleAuthButton extends GoogleBaseButton {
     super.key,
   });
 
-  void auth(context, ref) async {
-    final googleSignInAccount = await googleSignIn.signIn();
-    if (googleSignInAccount != null) {
+  void auth(BuildContext context, WidgetRef ref) async {
+    final isLoading = ref.read(authLoadingProvider);
+    if (isLoading) return; // Prevent multiple requests
+
+    ref.read(authLoadingProvider.notifier).setLoading(true);
+
+    try {
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+      }
+      final googleSignInAccount = await googleSignIn.signIn();
+      final apiRequestService = ApiRequestHandler(ref);
       var response = await apiRequestService.post(
         '/user_auth',
         {
           'service_auth_id_field_name': 'google_id',
-          'service_auth_code': googleSignInAccount.serverAuthCode,
+          'service_auth_code': googleSignInAccount!.serverAuthCode,
         },
-        onError: (error) =>
-            showErrorDialog(context, "Authentication request error!"),
+        onError: (error) {
+          showErrorDialog(context, error);
+        },
       );
+
       if (response?.statusCode == 200) {
         final user = ref.read(userProvider.notifier);
-        user.updateGoogleSignInAccount(googleSignInAccount);
         user.updateLogin(json.decode(response!.body)['user']['login']);
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
-      } else if (response?.statusCode == 401 && json.decode(response!.body)['status'] == 'not_registered') {
-        Navigator.pushReplacement(
+      } else if (response?.statusCode == 401 &&
+          json.decode(response!.body)['error']['type'] ==
+              'user_not_registered') {
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => RegistrationScreen()),
         );
-      } else {
-        showErrorDialog(context, "Authentication response error!");
       }
+    } finally {
+      // Ensure loading state is reset
+      ref.read(authLoadingProvider.notifier).setLoading(false);
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(authLoadingProvider);
     return ScreenButton(
       'Continue with Google',
-      () => auth(context, ref),
+      isLoading ? null : () => auth(context, ref),
       iconPath: 'assets/images/auth/google.svg',
     );
   }

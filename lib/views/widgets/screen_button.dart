@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ScreenButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String? iconPath;
   final Color color;
   final Color textColor;
@@ -22,11 +22,15 @@ class ScreenButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = onPressed == null;
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith(
           (states) => color,
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (states) => isDisabled ? Colors.grey : textColor,
         ),
         shape: WidgetStateProperty.all(
           border != null ? RoundedRectangleBorder(

@@ -1,10 +1,18 @@
 import 'dart:convert';
+import 'package:app_front/core/debug_printer.dart';
 import 'package:app_front/handler/hashing_handler.dart';
+import 'package:app_front/service/error/error_state_provider.dart';
 import 'package:app_front/setting/config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequestHandler {
   final String baseUrl = '${Config.apiUrl}:${Config.apiPort}';
+  final WidgetRef ref;
+
+  ApiRequestHandler(this.ref);
+
+  get headers => null;
 
   Map<String, String> _buildHeaders({bool isJson = false}) {
     final headers = {
@@ -22,27 +30,49 @@ class ApiRequestHandler {
 
   Future<http.Response?> _handleRequest(
     Future<http.Response> Function() request, {
-    void Function(String error)? onError,
+    String? url,
+    Map<String, String>? headers,
+    dynamic body,
   }) async {
     try {
-      final response = await request();
-
-      if (response.statusCode >= 500) {
-        onError?.call('An error occurred. Please try again.');
+      // Log the request details
+      DebugPrinter.log("Request URL: $url", tag: "API_REQUEST");
+      DebugPrinter.log("Request Headers: ${jsonEncode(headers)}",
+          tag: "API_REQUEST");
+      if (body != null) {
+        DebugPrinter.log("Request Body: ${jsonEncode(body)}",
+            tag: "API_REQUEST");
       }
 
-      if (Config.isDebugMode) {
-        print('Request URL: ${response.request?.url}');
-        print('Response Status: ${response.statusCode}');
-        print('Response Body: ${response.body}');
+      final response = await request();
+      // Log the response details
+      DebugPrinter.log("Response Status Code: ${response.statusCode}",
+          tag: "API_RESPONSE");
+      DebugPrinter.log("Response Body: ${response.body}", tag: "API_RESPONSE");
+
+      if (response.statusCode >= 500) {
+        final responseBody = jsonDecode(response.body);
+        if (responseBody['error'] is Map &&
+            responseBody['error']['user_notification'] != null) {
+          // Update global error state with user notification
+          ref
+              .read(errorStateProvider.notifier)
+              .showError(responseBody['error']['user_notification']);
+        } else {
+          // Update global error state with a generic error message
+          ref
+              .read(errorStateProvider.notifier)
+              .showError("An unexpected error occurred.");
+        }
       }
 
       return response;
     } catch (e) {
-      if (Config.isDebugMode) {
-        print('Request Error: $e');
-      }
-      onError?.call('Failed to complete the request.');
+      // Handle unexpected errors
+      DebugPrinter.error("Request failed: $e", tag: "API_ERROR");
+      ref
+          .read(errorStateProvider.notifier)
+          .showError("Failed to complete the request.");
       return null;
     }
   }
@@ -50,8 +80,11 @@ class ApiRequestHandler {
   Future<http.Response?> get(String endpoint,
       {void Function(String error)? onError}) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    return _handleRequest(() => http.get(url, headers: _buildHeaders()),
-        onError: onError);
+    return _handleRequest(
+      () => http.get(url, headers: _buildHeaders()),
+      url: endpoint,
+      headers: headers,
+    );
   }
 
   Future<http.Response?> post(String endpoint, Map<String, dynamic> body,
@@ -60,7 +93,9 @@ class ApiRequestHandler {
     return _handleRequest(
       () => http.post(url,
           headers: _buildHeaders(isJson: true), body: json.encode(body)),
-      onError: onError,
+      url: endpoint,
+      headers: headers,
+      body: body,
     );
   }
 
@@ -70,14 +105,19 @@ class ApiRequestHandler {
     return _handleRequest(
       () => http.put(url,
           headers: _buildHeaders(isJson: true), body: json.encode(body)),
-      onError: onError,
+      url: endpoint,
+      headers: headers,
+      body: body,
     );
   }
 
   Future<http.Response?> delete(String endpoint,
       {void Function(String error)? onError}) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    return _handleRequest(() => http.delete(url, headers: _buildHeaders()),
-        onError: onError);
+    return _handleRequest(
+      () => http.delete(url, headers: _buildHeaders()),
+      url: endpoint,
+      headers: headers,
+    );
   }
 }
