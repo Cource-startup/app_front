@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_front/handler/api_request_handler.dart';
 import 'package:app_front/service/user/user_provider.dart';
 import 'package:app_front/styles/app_colors.dart';
 import 'package:app_front/views/screens/home_screen.dart';
@@ -22,26 +23,22 @@ class RegistrationButton extends GoogleBaseButton {
     }
     final googleSignInAccount = await googleSignIn.signIn();
     if (googleSignInAccount != null) {
+      final apiRequestService = ApiRequestHandler(ref);
       var response = await apiRequestService.post(
         '/register_user',
         {
           'service_auth_id_field_name': 'google_id',
           'service_auth_code': googleSignInAccount.serverAuthCode,
           'login': loginTextfieldController.text,
-        },
-        onError: (error) =>
-            showErrorDialog(context, "Authentication request error!"),
+        }// Passes error to dialog
       );
       if (response?.statusCode == 200) {
         final user = ref.read(userProvider.notifier);
-        user.updateGoogleSignInAccount(googleSignInAccount);
         user.updateLogin(json.decode(response!.body)['user']['login']);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
-      } else {
-        showErrorDialog(context, "Authentication response error!");
       }
     }
   }

@@ -18,13 +18,11 @@ class User {
     String? id,
     String? login,
     String? sessionToken,
-    GoogleSignInAccount? googleSignInAccount,
   }) {
     return User(
       id: id ?? this.id,
       login: login ?? this.login,
       sessionToken: sessionToken ?? this.sessionToken,
-      googleSignInAccount: googleSignInAccount ?? this.googleSignInAccount,
     );
   }
 }

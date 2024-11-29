@@ -25,9 +25,4 @@ class UserNotifier extends StateNotifier<User> {
   void updateSessionToken(String sessionToken) {
     state = state.copyWith(sessionToken: sessionToken);
   }
-
-  // Update GoogleSignInAccount
-  void updateGoogleSignInAccount(GoogleSignInAccount googleSignInAccount) {
-    state = state.copyWith(googleSignInAccount: googleSignInAccount);
-  }
 }

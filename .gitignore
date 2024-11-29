@@ -1,3 +1,7 @@
+# Editors stuff
+.vscode/
+.idea
+
 # Miscellaneous
 *.class
 *.log

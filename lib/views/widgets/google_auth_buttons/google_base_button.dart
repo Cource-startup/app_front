@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:app_front/handler/api_request_handler.dart';
 import 'package:app_front/setting/config.dart';
 import 'package:app_front/views/widgets/dialogs/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +9,11 @@ class GoogleBaseButton extends ConsumerWidget {
   GoogleBaseButton({
     super.key,
   });
-
+  
   final googleSignIn = GoogleSignIn(
     forceCodeForRefreshToken: Config.forceCodeForRefreshTokenGoogle,
     serverClientId: Platform.isAndroid ? Config.googleServerClientId : null,
   );
-
-  final apiRequestService = ApiRequestHandler();
 
   void showErrorDialog(BuildContext context, String message) {
     if (!context.mounted) return;
