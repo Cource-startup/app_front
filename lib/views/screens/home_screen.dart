@@ -1,15 +1,28 @@
 import 'package:app_front/styles/styles.dart';
 import 'package:app_front/views/widgets/course-card.dart';
 import 'package:app_front/views/widgets/custom_app_bar.dart';
+import 'package:app_front/views/widgets/futter-bar.dart'; // Ваш кастомный футер
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0; // Хранит текущий выбранный индекс
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index; // Обновляем текущий индекс
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(), // Ваш кастомный AppBar
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -175,6 +188,10 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        onItemSelected: _onItemTapped, // Передаем обработчик
+        currentIndex: _currentIndex, // Передаем текущий индекс
       ),
     );
   }
