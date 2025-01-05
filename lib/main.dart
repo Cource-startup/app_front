@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       builder: (context, child) => GlobalErrorListener(child: child!),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+       home: const SplashScreen(),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:app_front/handler/api_request_handler.dart';
 import 'package:app_front/service/auth/auth_loading_provider.dart';
 import 'package:app_front/service/user/user_provider.dart';
-import 'package:app_front/views/screens/home_screen.dart';
+import 'package:app_front/views/screens/main_screen.dart';
 import 'package:app_front/views/screens/registration_screen.dart';
 import 'package:app_front/views/widgets/google_auth_buttons/google_base_button.dart';
 import 'package:app_front/views/widgets/screen_button.dart';
@@ -41,9 +41,10 @@ class GoogleAuthButton extends GoogleBaseButton {
       if (response?.statusCode == 200) {
         final user = ref.read(userProvider.notifier);
         user.updateLogin(json.decode(response!.body)['user']['login']);
+        user.updateId(json.decode(response!.body)['user']['id']);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       } else if (response?.statusCode == 401 &&
           json.decode(response!.body)['error']['type'] ==

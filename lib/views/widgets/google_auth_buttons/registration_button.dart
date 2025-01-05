@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:app_front/handler/api_request_handler.dart';
 import 'package:app_front/service/user/user_provider.dart';
 import 'package:app_front/styles/app_colors.dart';
-import 'package:app_front/views/screens/home_screen.dart';
+import 'package:app_front/views/screens/main_screen.dart';
 import 'package:app_front/views/widgets/google_auth_buttons/google_base_button.dart';
 import 'package:app_front/views/widgets/screen_button.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class RegistrationButton extends GoogleBaseButton {
         user.updateLogin(json.decode(response!.body)['user']['login']);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
     }
