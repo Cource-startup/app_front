@@ -30,12 +30,15 @@ class RegistrationButton extends GoogleBaseButton {
           'service_auth_id_field_name': 'google_id',
           'service_auth_code': googleSignInAccount.serverAuthCode,
           'login': loginTextfieldController.text,
-        }// Passes error to dialog
+        },
+        onError: (error) {
+          showErrorDialog(context, error);
+        },
       );
       if (response?.statusCode == 200) {
         final user = ref.read(userProvider.notifier);
         user.updateLogin(json.decode(response!.body)['user']['login']);
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );

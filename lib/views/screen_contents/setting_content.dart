@@ -3,12 +3,13 @@ import 'package:app_front/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 import 'package:app_front/views/widgets/custom_avatar.dart';
 import 'package:app_front/service/user/user_provider.dart';
 
 class SettingsContent extends ConsumerStatefulWidget {
+  const SettingsContent({super.key});
+
   @override
   _SettingsContentState createState() => _SettingsContentState();
 }

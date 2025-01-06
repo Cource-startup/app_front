@@ -1,6 +1,5 @@
 import 'package:app_front/model/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class UserNotifier extends StateNotifier<User> {
   UserNotifier()
@@ -9,8 +8,7 @@ class UserNotifier extends StateNotifier<User> {
           login: '',
           avatar: '',
           userName: '',
-          sessionToken: '',
-          googleSignInAccount: null, // Start with null
+          cookies: '', // Initialize cookies with an empty string
         ));
 
   // Update id
@@ -23,19 +21,23 @@ class UserNotifier extends StateNotifier<User> {
     state = state.copyWith(login: login);
   }
 
-  // Update login
+  // Update userName
   void updateUserName(String userName) {
     state = state.copyWith(userName: userName);
   }
 
-      // Update session token
-  void updateAvatar(String sessionToken) {
-    state = state.copyWith(sessionToken: sessionToken);
+  // Update avatar
+  void updateAvatar(String avatar) {
+    state = state.copyWith(avatar: avatar);
   }
 
-  // Update session token
-  void updateSessionToken(String sessionToken) {
-    state = state.copyWith(sessionToken: sessionToken);
+  // Update cookies
+  void updateCookies(String cookies) {
+    state = state.copyWith(cookies: cookies);
   }
 
+  // Clear cookies
+  void clearCookies() {
+    state = state.copyWith(cookies: '');
+  }
 }

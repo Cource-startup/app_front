@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_front/handler/api_request_handler.dart';
+import 'package:app_front/handler/hashing_handler.dart';
 import 'package:app_front/service/auth/auth_loading_provider.dart';
 import 'package:app_front/service/user/user_provider.dart';
 import 'package:app_front/views/screens/main_screen.dart';
@@ -38,21 +39,24 @@ class GoogleAuthButton extends GoogleBaseButton {
         },
       );
 
-      if (response?.statusCode == 200) {
-        final user = ref.read(userProvider.notifier);
-        user.updateLogin(json.decode(response!.body)['user']['login']);
-        user.updateId(json.decode(response!.body)['user']['id']);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
-        );
-      } else if (response?.statusCode == 401 &&
-          json.decode(response!.body)['error']['type'] ==
-              'user_not_registered') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => RegistrationScreen()),
-        );
+      if (response != null) {
+        final body = json.decode(response.body);
+
+        if (response.statusCode == 200) {
+          final user = ref.read(userProvider.notifier);
+          user.updateLogin(body['user']['login']);
+          user.updateId(body['user']['id']);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+          );
+        } else if (response.statusCode == 401 &&
+            body['error']['type'] == 'user_not_registered') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegistrationScreen()),
+          );
+        }
       }
     } finally {
       // Ensure loading state is reset
