@@ -1,21 +1,19 @@
-import 'package:google_sign_in/google_sign_in.dart';
-
 class User {
   final int id;
   final String login;
   final String avatar;
   final String userName;
-  final String? cookies;
+  final String cookies;
 
   User({
     required this.id,
     required this.login,
     required this.avatar,
     required this.userName,
-    this.cookies,
+    required this.cookies,
   });
 
-  // A copyWith method to create modified copies of User
+  // Ensure copyWith is properly defined
   User copyWith({
     int? id,
     String? login,
@@ -30,5 +28,16 @@ class User {
       userName: userName ?? this.userName,
       cookies: cookies ?? this.cookies,
     );
+  }
+
+  // Add toJson for converting to a Map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'login': login,
+      'avatar': avatar,
+      'userName': userName,
+      'cookies': cookies,
+    };
   }
 }

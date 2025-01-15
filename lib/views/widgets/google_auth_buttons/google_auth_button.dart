@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:app_front/handler/api_request_handler.dart';
-import 'package:app_front/handler/hashing_handler.dart';
 import 'package:app_front/service/auth/auth_loading_provider.dart';
 import 'package:app_front/service/user/user_provider.dart';
 import 'package:app_front/views/screens/main_screen.dart';
@@ -16,48 +12,45 @@ class GoogleAuthButton extends GoogleBaseButton {
     super.key,
   });
 
-  void auth(BuildContext context, WidgetRef ref) async {
+  Future<void> _auth(BuildContext context, WidgetRef ref) async {
     final isLoading = ref.read(authLoadingProvider);
     if (isLoading) return; // Prevent multiple requests
 
     ref.read(authLoadingProvider.notifier).setLoading(true);
 
     try {
+      // Sign out if already signed in
       if (await googleSignIn.isSignedIn()) {
         await googleSignIn.signOut();
       }
+
+      // Initiate Google Sign-In
       final googleSignInAccount = await googleSignIn.signIn();
-      final apiRequestService = ApiRequestHandler(ref);
-      var response = await apiRequestService.post(
-        '/user_auth',
-        {
-          'service_auth_id_field_name': 'google_id',
-          'service_auth_code': googleSignInAccount!.serverAuthCode,
-        },
-        onError: (error) {
-          showErrorDialog(context, error);
-        },
+      if (googleSignInAccount == null) {
+        throw Exception('Google Sign-In was cancelled.');
+      }
+
+      // Call the UserNotifier to handle authentication
+      final notifier = ref.read(userProvider.notifier);
+      final result = await notifier.authenticateUser(
+        serviceAuthIdFieldName: 'google_id',
+        serviceAuthCode: googleSignInAccount.serverAuthCode!,
       );
 
-      if (response != null) {
-        final body = json.decode(response.body);
-
-        if (response.statusCode == 200) {
-          final user = ref.read(userProvider.notifier);
-          user.updateLogin(body['user']['login']);
-          user.updateId(body['user']['id']);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainScreen()),
-          );
-        } else if (response.statusCode == 401 &&
-            body['error']['type'] == 'user_not_registered') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RegistrationScreen()),
-          );
-        }
-      }
+      // Navigate based on authentication result
+    if (result == AuthResult.authenticated) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    } else if (result == AuthResult.userNotRegistered) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RegistrationScreen()),
+      );
+    }
+    } catch (e) {
+      showErrorDialog(context, e.toString());
     } finally {
       // Ensure loading state is reset
       ref.read(authLoadingProvider.notifier).setLoading(false);
@@ -69,7 +62,7 @@ class GoogleAuthButton extends GoogleBaseButton {
     final isLoading = ref.watch(authLoadingProvider);
     return ScreenButton(
       'Continue with Google',
-      isLoading ? null : () => auth(context, ref),
+      isLoading ? null : () => _auth(context, ref),
       iconPath: 'assets/images/auth/google.svg',
     );
   }
