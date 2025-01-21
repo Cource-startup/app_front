@@ -13,7 +13,6 @@ class User {
     required this.cookies,
   });
 
-  // Ensure copyWith is properly defined
   User copyWith({
     int? id,
     String? login,
@@ -28,16 +27,5 @@ class User {
       userName: userName ?? this.userName,
       cookies: cookies ?? this.cookies,
     );
-  }
-
-  // Add toJson for converting to a Map
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'login': login,
-      'avatar': avatar,
-      'userName': userName,
-      'cookies': cookies,
-    };
   }
 }
