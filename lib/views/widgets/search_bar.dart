@@ -30,7 +30,7 @@ class CustomSearchBar extends StatelessWidget {
             border: Border(),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Icon(Icons.filter_list, color: Colors.white),
+          child: const Icon(Icons.filter_alt_outlined, color: Colors.black),
         ),
       ],
     );
