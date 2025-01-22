@@ -59,8 +59,12 @@ class GoogleAuthButton extends GoogleBaseButton {
         }
       }
     } finally {
-      // Ensure loading state is reset
-      ref.read(authLoadingProvider.notifier).setLoading(false);
+      // // Ensure loading state is reset
+      // ref.read(authLoadingProvider.notifier).setLoading(false);
+       Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => MainScreen()),
+  );
     }
   }
 
