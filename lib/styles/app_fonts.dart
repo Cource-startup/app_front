@@ -13,6 +13,11 @@ class AppFonts {
       fontSize: 24,
       color: AppColors.black,
       fontWeight: FontWeight.w800);
+  static TextStyle h3 = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 18,
+      color: AppColors.black,
+      fontWeight: FontWeight.w800);
 
   static TextStyle buttonLabel = TextStyle(
       fontFamily: 'Roboto',
@@ -23,6 +28,11 @@ class AppFonts {
   static TextStyle strong = TextStyle(
       fontFamily: 'Poppins',
       fontSize: 20,
+      color: AppColors.black,
+      fontWeight: FontWeight.w800);
+  static TextStyle title = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 16,
       color: AppColors.black,
       fontWeight: FontWeight.w800);
 

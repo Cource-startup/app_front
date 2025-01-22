@@ -9,7 +9,7 @@ class GoogleBaseButton extends ConsumerWidget {
   GoogleBaseButton({
     super.key,
   });
-  
+
   final googleSignIn = GoogleSignIn(
     forceCodeForRefreshToken: Config.forceCodeForRefreshTokenGoogle,
     serverClientId: Platform.isAndroid ? Config.googleServerClientId : null,
